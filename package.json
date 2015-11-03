@@ -1,0 +1,25 @@
+{
+  "name": "imagify-counter",
+  "version": "1.0.0",
+  "description": "The Imagify realtime counter",
+  "main": "app/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wp-media/imagify-counter.git"
+  },
+  "author": "WP Media <contact@wp-media.me>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wp-media/imagify-counter/issues"
+  },
+  "homepage": "https://github.com/wp-media/imagify-counter#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "node-yaml-config": "0.0.3",
+    "redis": "^2.3.0",
+    "socket.io": "^1.3.7"
+  }
+}
