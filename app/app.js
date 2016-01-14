@@ -6,7 +6,6 @@ var
 	yaml            = require('node-yaml-config'),
 	settings        = yaml.load( __dirname + '/settings.yml', (process.env.NODE_ENV || 'development') ),
 	redis           = require('redis'),
-	redisClient     = redis.createClient( settings.redis.port, settings.redis.host ),
 	redisSubscriber = redis.createClient( settings.redis.port, settings.redis.host );
 
 
@@ -27,29 +26,35 @@ var server = http.createServer(function (req, res) {
    Setting up socket.io
    ========================================================================== */
 
-var io = require('socket.io').listen(server);
+var
+	io           = require('socket.io').listen(server),
+	currentValue = 0;
 
-redisSubscriber.subscribe( settings.redis.channel );
+redisSubscriber.get('total_optimized_images', function (value) {
 
-redisSubscriber.on('message', function (channel, message) {
-	io.emit( 'counter', message );
-});
+	console.log('Total Optimized:' + value);
 
-io.sockets.on('connection', function (socket) {
+	redisSubscriber.subscribe( settings.redis.channel );
 
-	redisClient.get('total_optimized_images', function (value) {
-		io.emit( 'counter', value );
+	redisSubscriber.on('message', function (channel, message) {
+		io.emit( 'counter', message );
 	});
 
-	console.log( 'Client connected'.cyan );
+	io.sockets.on('connection', function (socket) {
+
+		io.emit( 'counter', currentValue );
+
+		console.log( 'Client connected'.cyan );
+
+	});
+
+	/* ==========================================================================
+	   Start service
+	   ========================================================================== */
+
+	server.listen(settings.server.port, function () {
+		console.log( ('Imagify Counter is listening on port ' + settings.server.port).bold.green );
+	});
 
 });
 
-
-/* ==========================================================================
-   Start service
-   ========================================================================== */
-
-server.listen(settings.server.port, function () {
-	console.log( ('Imagify Counter is listening on port ' + settings.server.port).bold.green );
-});
