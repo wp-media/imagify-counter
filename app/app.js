@@ -30,7 +30,7 @@ var
 	io           = require('socket.io').listen(server),
 	currentValue = 0;
 
-redisSubscriber.get('total_optimized_images', function (value) {
+redisSubscriber.get('total_optimized_images', function (err, value) {
 
 	console.log('Total Optimized:' + value);
 
