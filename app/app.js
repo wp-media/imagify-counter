@@ -6,6 +6,7 @@ var
 	yaml            = require('node-yaml-config'),
 	settings        = yaml.load( __dirname + '/settings.yml', (process.env.NODE_ENV || 'development') ),
 	redis           = require('redis'),
+	redisClient     = redis.createClient( settings.redis.port, settings.redis.host ),
 	redisSubscriber = redis.createClient( settings.redis.port, settings.redis.host );
 
 
@@ -36,11 +37,12 @@ redisSubscriber.on('message', function (channel, message) {
 
 io.sockets.on('connection', function (socket) {
 
-	redisSubscriber.get('total_optimized_images', function (value) {
+	redisClient.get('total_optimized_images', function (value) {
 		io.emit( 'counter', value );
 	});
 
 	console.log( 'Client connected'.cyan );
+
 });
 
 
