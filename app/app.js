@@ -35,6 +35,11 @@ redisSubscriber.on('message', function (channel, message) {
 });
 
 io.sockets.on('connection', function (socket) {
+
+	redisSubscriber.get('total_optimized_images', function (value) {
+		io.emit( 'counter', value );
+	});
+
 	console.log( 'Client connected'.cyan );
 });
 
