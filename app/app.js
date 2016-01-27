@@ -15,6 +15,11 @@ var
    ========================================================================== */
 
 var server = http.createServer(function (req, res) {
+
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Request-Method', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+	res.setHeader('Access-Control-Allow-Headers', '*');
     
 	res.writeHead(200, {'Content-Type': 'text/html'});
 	res.write('<html><head><title>Imagify</title></head><body><h1>Imagify Live Counter</h1></body></html>');
@@ -28,8 +33,6 @@ var server = http.createServer(function (req, res) {
    ========================================================================== */
 
 var io = require('socket.io').listen(server);
-
-
 
 redisSubscriber.subscribe( settings.redis.channel );
 
